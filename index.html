@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>CRUD Agenda</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Strive CRUD Agenda</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./backoffice.html">Backoffice</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="mt-5 mb-3">Current Appointments</h2>
+                <ul id="currentEvents" class="list-group">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const getAndDisplayEvents = async (url) => {
+            try {
+                const response = await fetch(url)
+
+                if (!response.ok) throw new Error("internal error")
+
+
+                const events = await response.json()
+
+                console.log(events)
+                displayEvents(events)
+            } catch (err) {
+                alert(err)
+            }
+        }
+
+        const getEvents = async (url) => {
+            const response = await fetch(url)
+
+            if (response.ok) {
+
+                const events = await response.json()
+
+                // console.log(events)
+                return events
+            }
+        }
+
+        const displayEvents = (events) => {
+
+            // DOM MANIPULATION
+
+            const ul = document.getElementById("currentEvents")
+
+            if (events.length > 0) {
+                events.forEach(event => {
+
+                    const li = document.createElement("li")
+
+                    li.classList.add("list-group-item", "d-flex", "justify-content-between")
+                    li.innerHTML = `<span>${event.name}</span><span class="badge badge-dark d-flex align-items-center ml-auto mr-2">${event.price}€</span><a href="./details.html?id=${event._id}">VIEW DETAILS</a>`
+                    ul.appendChild(li)
+                })
+            }
+        }
+
+        window.onload = async () => {
+
+            try {
+
+                const url = "https://striveschool-api.herokuapp.com/api/agenda/"
+
+                await getAndDisplayEvents(url)
+                // getEvents(url).then(events => displayEvents(events)).catch(err => console.log(err))
+                // const events = await getEvents(url)
+
+                // displayEvents(events)
+
+
+                console.log("Last of window on load")
+            } catch (err) {
+                console.log("This is the error: " + err)
+            }
+
+
+
+
+
+
+
+        }
+    </script>
+
+</body>
+
+</html>
